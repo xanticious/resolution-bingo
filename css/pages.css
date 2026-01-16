@@ -1,0 +1,361 @@
+/* ===================================
+   Resolution Bingo - Page-Specific Styles
+   =================================== */
+
+/* ===================================
+   Welcome Page
+   =================================== */
+
+.welcome-page {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+  padding: var(--spacing-xxl) 0;
+}
+
+.welcome-icon {
+  font-size: 5rem;
+  margin-bottom: var(--spacing-lg);
+}
+
+.welcome-title {
+  font-size: 2.5rem;
+  color: var(--primary-purple);
+  margin-bottom: var(--spacing-md);
+}
+
+.welcome-description {
+  font-size: 1.125rem;
+  color: var(--dark-gray);
+  margin-bottom: var(--spacing-xl);
+}
+
+.welcome-form {
+  background: var(--white);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+/* ===================================
+   Resolutions Page
+   =================================== */
+
+.resolutions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.resolution-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+  border-left: 4px solid var(--primary-blue);
+}
+
+.resolution-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.resolution-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-md);
+}
+
+.resolution-text {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--dark-gray);
+  margin-bottom: var(--spacing-md);
+}
+
+.resolution-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.resolution-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+/* Table View */
+.resolutions-table {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.resolutions-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.resolutions-table th {
+  background: var(--light-gray);
+  padding: var(--spacing-md);
+  text-align: left;
+  font-weight: 600;
+  color: var(--dark-gray);
+  cursor: pointer;
+  user-select: none;
+}
+
+.resolutions-table th:hover {
+  background: var(--border-gray);
+}
+
+.resolutions-table td {
+  padding: var(--spacing-md);
+  border-top: 1px solid var(--border-gray);
+}
+
+.resolutions-table tr:hover {
+  background: var(--light-gray);
+}
+
+/* List View */
+.resolutions-list {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.resolution-list-item {
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--border-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.resolution-list-item:last-child {
+  border-bottom: none;
+}
+
+.resolution-list-item:hover {
+  background: var(--light-gray);
+}
+
+/* ===================================
+   Bingo Card Creator Page
+   =================================== */
+
+.bingo-creator-layout {
+  display: grid;
+  grid-template-columns: 40% 60%;
+  gap: var(--spacing-xl);
+  min-height: 600px;
+}
+
+.creator-panel {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  overflow-y: auto;
+}
+
+.creator-section {
+  margin-bottom: var(--spacing-xl);
+}
+
+.creator-section:last-child {
+  margin-bottom: 0;
+}
+
+.section-title {
+  font-size: 1.25rem;
+  color: var(--primary-purple);
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 2px solid var(--border-gray);
+}
+
+/* Preview Panel */
+.preview-panel {
+  position: sticky;
+  top: calc(var(--spacing-xl) + 80px);
+  height: fit-content;
+}
+
+.bingo-preview-container {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===================================
+   Bingo Card View
+   =================================== */
+
+.bingo-card-viewer {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.bingo-card-actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-xl);
+}
+
+.print-options {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  margin-top: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.print-options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+}
+
+/* ===================================
+   Bingo Cards List
+   =================================== */
+
+.bingo-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.bingo-card-thumbnail {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.bingo-card-thumbnail:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.thumbnail-preview {
+  aspect-ratio: 1;
+  background: var(--light-gray);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+}
+
+.thumbnail-title {
+  font-weight: 600;
+  color: var(--dark-gray);
+  margin-bottom: var(--spacing-sm);
+}
+
+.thumbnail-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+}
+
+/* ===================================
+   Settings Page
+   =================================== */
+
+.settings-page {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.settings-section {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.settings-section-title {
+  font-size: 1.5rem;
+  color: var(--primary-blue);
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 2px solid var(--border-gray);
+}
+
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.category-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md);
+  border: 2px solid var(--border-gray);
+  border-radius: var(--radius-md);
+}
+
+.category-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.category-color-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--border-gray);
+}
+
+.category-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+/* ===================================
+   Help Page
+   =================================== */
+
+.help-page {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.help-section {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  margin-bottom: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.help-section h3 {
+  color: var(--primary-blue);
+  margin-top: var(--spacing-lg);
+}
+
+.help-section ul {
+  padding-left: var(--spacing-xl);
+}
+
+.help-section li {
+  margin-bottom: var(--spacing-sm);
+}

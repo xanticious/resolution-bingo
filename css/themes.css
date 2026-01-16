@@ -1,0 +1,190 @@
+/* ===================================
+   Resolution Bingo - Bingo Card Themes
+   =================================== */
+
+/* Base Bingo Card Styles */
+.bingo-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-md);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.bingo-card-title {
+  text-align: center;
+  font-family: var(--font-header);
+  font-size: 2rem;
+  margin-bottom: var(--spacing-lg);
+  color: var(--dark-gray);
+}
+
+.bingo-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2px;
+  background: var(--border-gray);
+  border: 2px solid var(--border-gray);
+}
+
+.bingo-square {
+  aspect-ratio: 1;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm);
+  font-size: 0.875rem;
+  text-align: center;
+  transition: background-color var(--transition-fast);
+}
+
+.bingo-square:hover {
+  background: var(--light-gray);
+}
+
+.bingo-square.free-square {
+  background: var(--light-gray);
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+/* ===================================
+   Theme: Flowers
+   =================================== */
+
+.bingo-card.theme-flowers {
+  border: 3px solid var(--color-pink);
+}
+
+.bingo-card.theme-flowers .bingo-card-title {
+  color: var(--color-pink);
+}
+
+.bingo-card.theme-flowers .bingo-grid {
+  border-color: var(--color-pink);
+  background: var(--color-pink);
+}
+
+.bingo-card.theme-flowers .bingo-square.free-square {
+  background: #fff0f5;
+  color: var(--color-pink);
+}
+
+/* ===================================
+   Theme: Cute
+   =================================== */
+
+.bingo-card.theme-cute {
+  border: 3px solid var(--primary-purple);
+}
+
+.bingo-card.theme-cute .bingo-card-title {
+  color: var(--primary-purple);
+}
+
+.bingo-card.theme-cute .bingo-grid {
+  border-color: var(--primary-purple);
+  background: var(--primary-purple);
+}
+
+.bingo-card.theme-cute .bingo-square {
+  border-radius: var(--radius-sm);
+}
+
+.bingo-card.theme-cute .bingo-square.free-square {
+  background: #f3e5f5;
+  color: var(--primary-purple);
+}
+
+/* ===================================
+   Theme: Science
+   =================================== */
+
+.bingo-card.theme-science {
+  border: 3px solid var(--color-blue);
+}
+
+.bingo-card.theme-science .bingo-card-title {
+  color: var(--color-blue);
+}
+
+.bingo-card.theme-science .bingo-grid {
+  border-color: var(--color-blue);
+  background: var(--color-blue);
+}
+
+.bingo-card.theme-science .bingo-square.free-square {
+  background: #e3f2fd;
+  color: var(--color-blue);
+}
+
+/* ===================================
+   Theme: Mathy
+   =================================== */
+
+.bingo-card.theme-mathy {
+  border: 3px solid var(--dark-gray);
+}
+
+.bingo-card.theme-mathy .bingo-card-title {
+  color: var(--dark-gray);
+}
+
+.bingo-card.theme-mathy .bingo-grid {
+  border-color: var(--dark-gray);
+  background: var(--dark-gray);
+}
+
+.bingo-card.theme-mathy .bingo-square {
+  font-family: 'Courier New', monospace;
+}
+
+.bingo-card.theme-mathy .bingo-square.free-square {
+  background: var(--light-gray);
+  color: var(--dark-gray);
+}
+
+/* ===================================
+   Theme: Animals
+   =================================== */
+
+.bingo-card.theme-animals {
+  border: 3px solid var(--color-brown);
+}
+
+.bingo-card.theme-animals .bingo-card-title {
+  color: var(--color-brown);
+}
+
+.bingo-card.theme-animals .bingo-grid {
+  border-color: var(--color-brown);
+  background: var(--color-brown);
+}
+
+.bingo-card.theme-animals .bingo-square.free-square {
+  background: #fff8e1;
+  color: var(--color-brown);
+}
+
+/* ===================================
+   Font Styles
+   =================================== */
+
+.bingo-card.font-silly {
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.bingo-card.font-fancy {
+  font-family: 'Georgia', serif;
+}
+
+.bingo-card.font-writer {
+  font-family: var(--font-handwritten);
+}
+
+.bingo-card.font-headlines {
+  font-family: 'Arial Black', sans-serif;
+  text-transform: uppercase;
+}

@@ -1,0 +1,50 @@
+/* ===================================
+   Resolution Bingo - Print Styles
+   =================================== */
+
+@media print {
+  /* Hide UI elements */
+  .app-header,
+  .action-bar,
+  .filter-bar,
+  .bingo-card-actions,
+  .print-options,
+  .btn,
+  button {
+    display: none !important;
+  }
+
+  /* Reset body styles */
+  body {
+    background: white;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Ensure bingo card fills page appropriately */
+  .bingo-card {
+    box-shadow: none;
+    border: 3px solid currentColor;
+    page-break-inside: avoid;
+    margin: 0;
+    max-width: 100%;
+  }
+
+  /* Ensure grid lines print well */
+  .bingo-grid {
+    border-width: 2px;
+  }
+
+  .bingo-square {
+    border: 1px solid currentColor;
+    page-break-inside: avoid;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Force colors in print */
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
