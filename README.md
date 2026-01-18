@@ -87,10 +87,6 @@ All data is stored in browser's LocalStorage. Remember to:
 - Save the JSON file as backup
 - Import when switching browsers or devices
 
-## License
-
-MIT License - Feel free to use and modify!
-
 ## Credits
 
 All emojis designed by [OpenMoji](https://openmoji.org/) – the open-source emoji and icon project. License: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)

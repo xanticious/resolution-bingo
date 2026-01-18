@@ -3,6 +3,7 @@ import {
   generateUUID,
   getCurrentTimestamp,
   getOpenMojiHTML,
+  createDefaultCategories,
 } from '../utils.js';
 
 export class WelcomePage {
@@ -15,6 +16,7 @@ export class WelcomePage {
   async render() {
     const container = document.createElement('div');
     container.className = 'page welcome-page';
+    container.setAttribute('data-testid', 'welcome-page');
     container.innerHTML = `
             <div class="welcome-icon">${getOpenMojiHTML(
               '1F3AF',
@@ -27,18 +29,19 @@ export class WelcomePage {
             </p>
             <div class="welcome-form">
                 <div class="form-group">
-                    <label class="form-label" for="profile-name">What's your name?</label>
+                    <label class="form-label" for="welcome-name-input">What's your name?</label>
                     <input 
                         type="text" 
-                        id="profile-name" 
+                        id="welcome-name-input" 
                         class="form-input" 
                         placeholder="Enter your name"
                         maxlength="50"
                         autofocus
+                        data-testid="profile-name-input"
                     />
                     <span class="form-helper">We'll use this to create your profile</span>
                 </div>
-                <button class="btn btn-primary btn-lg" id="get-started-btn">
+                <button class="btn btn-primary btn-lg" id="get-started-btn" data-testid="get-started-btn">
                     Get Started ${getOpenMojiHTML('1F680', 'rocket')}
                 </button>
             </div>
@@ -48,7 +51,7 @@ export class WelcomePage {
   }
 
   mount() {
-    const nameInput = document.getElementById('profile-name');
+    const nameInput = document.getElementById('welcome-name-input');
     const getStartedBtn = document.getElementById('get-started-btn');
 
     getStartedBtn.addEventListener('click', () => {
@@ -89,14 +92,17 @@ export class WelcomePage {
       hasSeenWelcome: true,
     };
 
+    // Create default categories for new profile
+    const categories = this.state.get('lifeCategories') || [];
+    const defaultCategories = createDefaultCategories(profile.id);
+    categories.push(...defaultCategories);
+
     this.state.update({
       profiles: profiles,
       currentProfileId: profile.id,
       preferences: preferences,
+      lifeCategories: categories,
     });
-
-    // Update header
-    document.getElementById('profile-indicator').textContent = name;
 
     // Redirect to main page
     window.location.hash = '#/';

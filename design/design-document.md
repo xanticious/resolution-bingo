@@ -55,7 +55,11 @@ Resolution Bingo is a fun, ADHD-friendly web application that gamifies New Year'
   id: "uuid-v4",                    // Unique identifier
   profileId: "uuid-v4",             // Reference to profile
   text: "string",                   // Resolution text (max 1000 chars)
-  frequency: "single|recurring",    // Type of goal
+  frequency: {                      // Frequency structure
+    type: "single|count|rate",      // single: one-time, count: X times total, rate: X times per duration
+    count: number|null,             // For count/rate types: number of times
+    duration: "week|month|year"|null // For rate type only: per week/month/year
+  },
   excitementLevel: 1-5,             // 1=Dreading, 2=Not fond of, 3=Neutral, 4=Feeling good, 5=Really excited
   lifeCategoryId: "uuid-v4",        // Reference to life category
   order: number,                    // Display order in list
@@ -184,7 +188,10 @@ Header (Persistent on all pages)
 - **Purpose:** Form to create or modify a resolution
 - **Components:**
   - Resolution text (textarea, max 1000 chars)
-  - Frequency (radio: Single Occurrence / Recurring)
+  - Frequency:
+    - Type selector (radio: Single Occurrence / Number of Times / Number per Duration)
+    - If "Number of Times": Number input (e.g., "10 books")
+    - If "Number per Duration": Number input + Duration dropdown (per Week / per Month / per Year)
   - Excitement Level (5-point scale with emoji indicators)
   - Life Category (dropdown of user's categories)
   - Real-time character counter

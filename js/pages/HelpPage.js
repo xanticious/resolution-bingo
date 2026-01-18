@@ -32,7 +32,13 @@ export class HelpPage {
                     <li>Go to the Resolutions page</li>
                     <li>Click "Add Resolution"</li>
                     <li>Enter your resolution text (up to 1000 characters)</li>
-                    <li>Choose frequency: Single Occurrence or Recurring</li>
+                    <li>Choose frequency type:
+                        <ul>
+                            <li><strong>Single Occurrence:</strong> One-time goal (e.g., "Publish a book this year")</li>
+                            <li><strong>Number of Times:</strong> Do something X times total (e.g., "Read 10 books this year")</li>
+                            <li><strong>Number per Duration:</strong> Do something X times per week/month/year (e.g., "Exercise 5 times per week")</li>
+                        </ul>
+                    </li>
                     <li>Select your excitement level (1-5)</li>
                     <li>Pick a life category</li>
                     <li>Save automatically!</li>

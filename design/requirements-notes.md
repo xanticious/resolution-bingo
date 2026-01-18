@@ -84,8 +84,9 @@ ADHD-friendly webapp to gamify New Year's resolutions through a "2026 Bingo" car
 
 1. **Frequency** (per resolution)
 
-   - Recurring (e.g., "exercise 3 times per week")
-   - Single Occurrence (e.g., "see a play")
+   - Single Occurrence (e.g., "publish a book this year")
+   - Number of Times (e.g., "read 10 books this year")
+   - Number per Duration (e.g., "exercise 3 times per week", "get a haircut 2 times per month")
 
 2. **Excitement Level** (per resolution)
 
@@ -182,8 +183,9 @@ ADHD-friendly webapp to gamify New Year's resolutions through a "2026 Bingo" car
 **Q: Should we enforce Single Occurrence resolutions only for Bingo?**
 
 - **A:** No enforcement - users can choose whatever they want
-  - Provide helpful suggestion to filter by Single Occurrence (since those can be crossed off)
-  - Some users may not fill out recurrence and hide that field entirely
+  - Provide helpful suggestion to filter by Single Occurrence (since those can be definitively crossed off)
+  - Number of Times goals can also work well for bingo (e.g., "Read 10 books")
+  - Some users may not fill out frequency details and hide that field entirely
 
 **Q: What print sizes to support?**
 

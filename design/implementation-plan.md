@@ -125,7 +125,7 @@ resolution-bingo/
    - Implement `storage.js` (LocalStorage wrapper with error handling)
    - Create data models:
      - `Profile.js` with CRUD operations
-     - `Resolution.js` with CRUD operations
+     - `Resolution.js` with CRUD operations (including frequency object structure)
      - `LifeCategory.js` with CRUD operations
      - `BingoCard.js` with CRUD operations
    - Implement UUID generation utility
@@ -254,7 +254,7 @@ resolution-bingo/
 
    - **Filter Controls:**
 
-     - Multi-select filter for Frequency
+     - Multi-select filter for Frequency (Single Occurrence / Number of Times / Number per Duration)
      - Multi-select filter for Excitement Level
      - Multi-select filter for Life Category
      - "Clear Filters" button
@@ -309,7 +309,10 @@ resolution-bingo/
 
    - Add/Edit form with fields:
      - Resolution text (textarea with counter)
-     - Frequency (radio buttons)
+     - Frequency type (radio buttons: Single Occurrence / Number of Times / Number per Duration)
+     - Frequency details:
+       - If "Number of Times": Number input field
+       - If "Number per Duration": Number input + Duration dropdown (per Week / per Month / per Year)
      - Excitement level (5-point scale with emojis)
      - Life category (dropdown)
    - Real-time validation

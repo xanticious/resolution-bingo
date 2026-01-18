@@ -89,6 +89,31 @@
   animation: fadeIn var(--transition-medium);
 }
 
+.modal-content {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp var(--transition-medium);
+}
+
+.modal-content.modal-small {
+  max-width: 400px;
+}
+
+.modal-content.modal-medium {
+  max-width: 600px;
+}
+
+.modal-content.modal-large {
+  max-width: 800px;
+}
+
 .modal {
   background: var(--white);
   border-radius: var(--radius-lg);
@@ -110,6 +135,15 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 

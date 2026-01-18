@@ -36,7 +36,12 @@
             style="width: 1.5em; height: 1.5em; display: inline-block; vertical-align: middle; margin-right: 0.25em;">
           Resolution Bingo
         </h1>
-        <span class="profile-indicator" id="profile-indicator">John</span>
+        <div class="profile-indicator" id="profile-indicator" data-testid="profile-indicator">
+          <span id="profile-name">Loading...</span>
+          <div class="profile-dropdown" id="profile-dropdown" data-testid="profile-dropdown">
+            <!-- Profile options will be populated by JavaScript -->
+          </div>
+        </div>
       </div>
       <nav class="main-nav">
         <a href="#/" class="nav-link active" data-page="resolutions">Resolutions</a>
