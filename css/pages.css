@@ -53,7 +53,11 @@
   padding: var(--spacing-lg);
   box-shadow: var(--shadow-sm);
   transition: all var(--transition-fast);
-  border-left: 4px solid var(--primary-blue);
+  border-left: 11px solid var(--primary-blue);
+  border-right: 11px solid var(--primary-blue);
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
 }
 
 .resolution-card:hover {
@@ -79,11 +83,14 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-sm);
+  margin-bottom: auto;
 }
 
 .resolution-actions {
   display: flex;
   gap: var(--spacing-sm);
+  margin-top: auto;
+  padding-top: var(--spacing-md);
 }
 
 /* Table View */
@@ -120,6 +127,12 @@
 
 .resolutions-table tr:hover {
   background: var(--light-gray);
+}
+
+.resolutions-table .actions-cell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
 }
 
 /* List View */

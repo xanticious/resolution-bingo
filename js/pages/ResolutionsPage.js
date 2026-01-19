@@ -276,38 +276,33 @@ export class ResolutionsPage {
             return `
             <div class="resolution-card" data-resolution-id="${
               resolution.id
-            }" style="border-left-color: ${borderColor};" data-testid="resolution-card-${
+            }" style="border-left-color: ${borderColor}; border-right-color: ${borderColor};" data-testid="resolution-card-${
               resolution.id
             }">
               <div class="resolution-text">${resolution.text}</div>
               <div class="resolution-meta">
                 ${
                   prefs.displayOptions.showLifeCategory && category
-                    ? `
-                  <span class="badge badge-category" style="background-color: ${category.color};">${category.name}</span>
-                `
+                    ? `<span class="badge badge-category" style="background-color: ${category.color};">${category.name}</span>`
                     : ''
                 }
                 ${
                   prefs.displayOptions.showFrequency
-                    ? `
-                  <span class="badge badge-frequency">${formatFrequency(
-                    resolution.frequency
-                  )}</span>
-                `
+                    ? `<span class="badge badge-frequency">${formatFrequency(
+                        resolution.frequency
+                      )}</span>`
                     : ''
                 }
                 ${
                   prefs.displayOptions.showExcitementLevel
-                    ? `
-                  <span class="badge badge-excitement badge-excitement-${
-                    resolution.excitementLevel
-                  }">
-                    ${getOpenMojiHTML(
-                      EXCITEMENT_EMOJIS[resolution.excitementLevel]
-                    )} ${EXCITEMENT_LABELS[resolution.excitementLevel]}
-                  </span>
-                `
+                    ? `<span class="badge badge-excitement badge-excitement-${
+                        resolution.excitementLevel
+                      }">${getOpenMojiHTML(
+                        EXCITEMENT_EMOJIS[resolution.excitementLevel],
+                        '',
+                        '',
+                        '2em'
+                      )}</span>`
                     : ''
                 }
               </div>
@@ -461,7 +456,12 @@ export class ResolutionsPage {
 
             if (prefs.displayOptions.showExcitementLevel) {
               parts.push(
-                getOpenMojiHTML(EXCITEMENT_EMOJIS[resolution.excitementLevel])
+                getOpenMojiHTML(
+                  EXCITEMENT_EMOJIS[resolution.excitementLevel],
+                  '',
+                  '',
+                  '2em'
+                )
               );
             }
 
@@ -623,13 +623,44 @@ export class ResolutionsPage {
   }
 
   applySorting(resolutions) {
-    if (!this.sortBy) {
-      return resolutions;
-    }
-
     const sorted = [...resolutions];
     const categories = this.getLifeCategoriesForCurrentProfile();
     const categoryMap = Object.fromEntries(categories.map((c) => [c.id, c]));
+
+    // For List and Card views, use default sorting by category, frequency, then name
+    if (
+      !this.sortBy &&
+      (this.viewMode === 'list' || this.viewMode === 'cards')
+    ) {
+      sorted.sort((a, b) => {
+        // First by category name
+        const aCat = categoryMap[a.lifeCategoryId]?.name || '';
+        const bCat = categoryMap[b.lifeCategoryId]?.name || '';
+        if (aCat !== bCat) {
+          return aCat.localeCompare(bCat);
+        }
+
+        // Then by frequency type and count
+        const aFreqKey = `${a.frequency.type}-${a.frequency.count || 0}-${
+          a.frequency.duration || ''
+        }`;
+        const bFreqKey = `${b.frequency.type}-${b.frequency.count || 0}-${
+          b.frequency.duration || ''
+        }`;
+        if (aFreqKey !== bFreqKey) {
+          return aFreqKey.localeCompare(bFreqKey);
+        }
+
+        // Finally by resolution text
+        return a.text.toLowerCase().localeCompare(b.text.toLowerCase());
+      });
+      return sorted;
+    }
+
+    // For Table view with explicit sorting
+    if (!this.sortBy) {
+      return resolutions;
+    }
 
     sorted.sort((a, b) => {
       let aVal, bVal;

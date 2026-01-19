@@ -643,3 +643,10 @@ a:hover {
   width: 100%;
   height: 100%;
 }
+
+/* Larger emojis in card and list views */
+.resolution-card .openmoji,
+.resolution-list-item .openmoji {
+  width: 1.75em;
+  height: 1.75em;
+}

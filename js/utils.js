@@ -171,8 +171,13 @@ export function createOpenMoji(code, alt = '', className = '') {
 }
 
 // Helper function to get OpenMoji as inline HTML
-export function getOpenMojiHTML(code, alt = '', className = '') {
-  return `<img src="https://openmoji.org/data/color/svg/${code}.svg" alt="${alt}" class="openmoji ${className}" width="72" height="72" style="width: 1.5em; height: 1.5em; display: inline-block; vertical-align: middle;">`;
+export function getOpenMojiHTML(
+  code,
+  alt = '',
+  className = '',
+  size = '1.5em'
+) {
+  return `<img src="https://openmoji.org/data/color/svg/${code}.svg" alt="${alt}" class="openmoji ${className}" width="72" height="72" style="width: ${size}; height: ${size}; display: inline-block; vertical-align: middle;">`;
 }
 
 /**
