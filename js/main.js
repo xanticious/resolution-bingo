@@ -8,6 +8,7 @@ import {
   createDefaultCategories,
 } from './utils.js';
 import { showPromptDialog } from './components/Modal.js';
+import { getPersonaOptions, generateDemoProfile } from './demoProfiles.js';
 
 // Import pages
 import { WelcomePage } from './pages/WelcomePage.js';
@@ -41,6 +42,9 @@ class App {
 
     // Setup profile dropdown
     this.setupProfileDropdown();
+
+    // Setup demo profile dropdown
+    this.setupDemoProfileDropdown();
 
     // Update navigation active state
     this.setupNavigation();
@@ -287,6 +291,111 @@ class App {
     if (window.location.hash === '#/welcome') {
       window.location.hash = '#/';
     }
+    window.location.reload();
+  }
+
+  setupDemoProfileDropdown() {
+    const demoBtn = document.getElementById('demo-profile-btn');
+    const demoDropdown = document.getElementById('demo-profile-dropdown');
+
+    if (!demoBtn || !demoDropdown) return;
+
+    // Populate demo persona options
+    this.populateDemoProfileDropdown();
+
+    // Toggle dropdown on button click
+    demoBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      demoDropdown.classList.toggle('open');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!demoBtn.contains(e.target) && !demoDropdown.contains(e.target)) {
+        demoDropdown.classList.remove('open');
+      }
+    });
+  }
+
+  populateDemoProfileDropdown() {
+    const demoDropdown = document.getElementById('demo-profile-dropdown');
+    if (!demoDropdown) return;
+
+    const personas = getPersonaOptions();
+    const header = demoDropdown.querySelector('.demo-dropdown-header');
+
+    const personaItems = personas
+      .map((persona) => {
+        return `
+          <div 
+            class="demo-persona-item" 
+            data-persona-index="${persona.index}"
+            title="${persona.description}"
+          >
+            <div class="demo-persona-label">${persona.label}</div>
+            <div class="demo-persona-description">${persona.description}</div>
+          </div>
+        `;
+      })
+      .join('');
+
+    // Keep the header and add persona items
+    demoDropdown.innerHTML = header.outerHTML + personaItems;
+
+    // Add click handlers to persona items
+    demoDropdown.querySelectorAll('.demo-persona-item').forEach((item) => {
+      item.addEventListener('click', (e) => {
+        const personaIndex = parseInt(item.dataset.personaIndex);
+        demoDropdown.classList.remove('open');
+        this.loadDemoProfile(personaIndex);
+      });
+    });
+  }
+
+  loadDemoProfile(personaIndex) {
+    const demoData = generateDemoProfile(personaIndex, this.state);
+    if (!demoData) {
+      console.error('Failed to generate demo profile');
+      return;
+    }
+
+    const { profile, categories, resolutions, hideOptionalFields } = demoData;
+
+    // Add profile
+    const profiles = this.state.get('profiles') || [];
+    profiles.push(profile);
+
+    // Add categories
+    const allCategories = this.state.get('lifeCategories') || [];
+    allCategories.push(...categories);
+
+    // Add resolutions
+    const allResolutions = this.state.get('resolutions') || [];
+    allResolutions.push(...resolutions);
+
+    // Set preferences
+    const preferences = this.state.get('preferences') || {};
+    preferences[profile.id] = createDefaultPreferences(profile.id);
+
+    // Update hide optional fields preference if specified
+    if (hideOptionalFields) {
+      preferences[profile.id].hideOptionalFields = true;
+    }
+
+    // Update state
+    this.state.update({
+      profiles: profiles,
+      currentProfileId: profile.id,
+      lifeCategories: allCategories,
+      resolutions: allResolutions,
+      preferences: preferences,
+    });
+
+    // Save immediately before reload
+    this.state.save();
+
+    // Redirect to resolutions page and reload
+    window.location.hash = '#/';
     window.location.reload();
   }
 }
