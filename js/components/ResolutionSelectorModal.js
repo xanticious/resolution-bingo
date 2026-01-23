@@ -166,44 +166,113 @@ export class ResolutionSelectorModal {
       `;
     }
 
-    return `
-      <div class="resolutions-grid">
-        ${resolutions
-          .map((res) => {
-            const isSelected = this.selectedResolutions.has(res.id);
-            const category = this.getCategoryById(res.lifeCategoryId);
-            const canSelect = !isSelected && this.selectedResolutions.size < 25;
+    // Group resolutions by category
+    const grouped = this.groupResolutionsByCategory(resolutions);
 
-            return `
-            <div class="resolution-card ${isSelected ? 'selected' : ''} ${!canSelect && !isSelected ? 'disabled' : ''}" 
-                 data-resolution-id="${res.id}">
-              <div class="resolution-card-content">
-                <div class="resolution-card-text">${res.text}</div>
-                <div class="resolution-card-meta">
-                  ${
-                    category
-                      ? `<span class="badge" style="background-color: ${category.color}">${category.name}</span>`
-                      : ''
-                  }
-                  <span class="badge-neutral">${this.getFrequencyText(res.frequency)}</span>
-                  <span class="excitement-indicator" title="${this.getExcitementLabel(res.excitementLevel)}">
-                    ${this.getExcitementEmoji(res.excitementLevel)}
-                  </span>
-                </div>
-              </div>
-              <div class="resolution-card-actions">
-                ${
-                  isSelected
-                    ? '<button class="btn btn-sm btn-danger" data-action="remove">Remove</button>'
-                    : `<button class="btn btn-sm btn-primary" data-action="add" ${!canSelect ? 'disabled' : ''}>Add</button>`
-                }
-              </div>
-            </div>
-          `;
-          })
-          .join('')}
+    return `
+      <div class="resolutions-table-wrapper">
+        <table class="resolutions-table">
+          <thead>
+            <tr>
+              <th>Resolution</th>
+              <th>Category</th>
+              <th>Frequency</th>
+              <th>Excitement</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${grouped
+              .map(({ category, resolutions }) => {
+                const categoryRows = resolutions
+                  .map((res) => {
+                    const isSelected = this.selectedResolutions.has(res.id);
+                    const canSelect =
+                      !isSelected && this.selectedResolutions.size < 25;
+
+                    return `
+                  <tr class="${isSelected ? 'selected-row' : ''} ${!canSelect && !isSelected ? 'disabled-row' : ''}" 
+                      data-resolution-id="${res.id}">
+                    <td class="resolution-text-cell">${res.text}</td>
+                    <td class="category-cell">
+                      ${
+                        category
+                          ? `<span class="badge" style="background-color: ${category.color}">${category.name}</span>`
+                          : '<span class="text-muted">—</span>'
+                      }
+                    </td>
+                    <td class="frequency-cell">
+                      <span class="badge-neutral">${this.getFrequencyText(res.frequency)}</span>
+                    </td>
+                    <td class="excitement-cell">
+                      <span class="excitement-indicator" title="${this.getExcitementLabel(res.excitementLevel)}">
+                        ${this.getExcitementEmoji(res.excitementLevel)}
+                      </span>
+                    </td>
+                    <td class="action-cell">
+                      ${
+                        isSelected
+                          ? '<button class="btn btn-sm btn-danger" data-action="remove">Remove</button>'
+                          : `<button class="btn btn-sm btn-primary" data-action="add" ${!canSelect ? 'disabled' : ''}>Add</button>`
+                      }
+                    </td>
+                  </tr>
+                `;
+                  })
+                  .join('');
+
+                // Add a group header row
+                const categoryName = category ? category.name : 'Uncategorized';
+                const categoryColor = category ? category.color : '#999';
+                return `
+                  <tr class="category-group-header">
+                    <td colspan="5">
+                      <span class="badge" style="background-color: ${categoryColor}">${categoryName}</span>
+                    </td>
+                  </tr>
+                  ${categoryRows}
+                `;
+              })
+              .join('')}
+          </tbody>
+        </table>
       </div>
     `;
+  }
+
+  groupResolutionsByCategory(resolutions) {
+    // Group by category
+    const groups = new Map();
+
+    resolutions.forEach((res) => {
+      const categoryId = res.lifeCategoryId || 'uncategorized';
+      if (!groups.has(categoryId)) {
+        groups.set(categoryId, []);
+      }
+      groups.get(categoryId).push(res);
+    });
+
+    // Sort each group alphabetically by resolution text
+    groups.forEach((resolutions) => {
+      resolutions.sort((a, b) => a.text.localeCompare(b.text));
+    });
+
+    // Convert to array and sort by category name
+    const result = Array.from(groups.entries())
+      .map(([categoryId, resolutions]) => {
+        const category =
+          categoryId === 'uncategorized'
+            ? null
+            : this.getCategoryById(categoryId);
+        return { category, resolutions };
+      })
+      .sort((a, b) => {
+        const nameA = a.category ? a.category.name : 'Uncategorized';
+        const nameB = b.category ? b.category.name : 'Uncategorized';
+        return nameA.localeCompare(nameB);
+      });
+
+    return result;
   }
 
   setupEventListeners() {
@@ -246,14 +315,16 @@ export class ResolutionSelectorModal {
       ?.addEventListener('click', (e) => {
         const button = e.target.closest('button[data-action]');
         if (button && !button.disabled) {
-          const card = button.closest('.resolution-card');
-          const resolutionId = card.dataset.resolutionId;
-          const action = button.dataset.action;
+          const row = button.closest('tr[data-resolution-id]');
+          if (row) {
+            const resolutionId = row.dataset.resolutionId;
+            const action = button.dataset.action;
 
-          if (action === 'add') {
-            this.addResolution(resolutionId);
-          } else if (action === 'remove') {
-            this.removeResolution(resolutionId);
+            if (action === 'add') {
+              this.addResolution(resolutionId);
+            } else if (action === 'remove') {
+              this.removeResolution(resolutionId);
+            }
           }
         }
       });
