@@ -3,15 +3,30 @@
    =================================== */
 
 @media print {
-  /* Hide UI elements */
+  /* Hide all UI elements */
   .app-header,
+  .page-header,
+  .page-description,
   .action-bar,
   .filter-bar,
   .bingo-card-actions,
   .print-options,
+  .card-actions,
+  .creator-actions,
+  .creator-config-panel,
+  .preview-header,
   .btn,
-  button {
+  button,
+  a {
     display: none !important;
+  }
+
+  /* Hide all card/section containers */
+  .card {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    padding: 0 !important;
   }
 
   /* Reset body styles */
@@ -21,12 +36,26 @@
     padding: 0;
   }
 
+  /* Reset page container */
+  .page,
+  .bingo-card-viewer,
+  .bingo-card-display,
+  .bingo-creator-centered,
+  .creator-preview-panel,
+  .bingo-preview-container {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    border: none;
+    background: transparent;
+  }
+
   /* Ensure bingo card fills page appropriately */
   .bingo-card {
     box-shadow: none;
-    border: 3px solid currentColor;
     page-break-inside: avoid;
-    margin: 0;
+    margin: 0 auto;
     max-width: 100%;
   }
 
@@ -36,10 +65,15 @@
   }
 
   .bingo-square {
-    border: 1px solid currentColor;
     page-break-inside: avoid;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+  }
+
+  /* Disable hover effects when printing */
+  .bingo-square:hover {
+    transform: none !important;
+    background: inherit !important;
   }
 
   /* Force colors in print */

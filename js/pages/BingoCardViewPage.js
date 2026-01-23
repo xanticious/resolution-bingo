@@ -46,7 +46,7 @@ export class BingoCardViewPage {
           <div>
             <h1 class="page-title">${this.card.saveName}</h1>
             <p class="page-description">Last updated ${formatDate(
-              this.card.updatedAt
+              this.card.updatedAt,
             )}</p>
           </div>
           <a href="#/bingo-cards" class="btn btn-outline">
@@ -115,15 +115,15 @@ export class BingoCardViewPage {
 
     return `
       <div class="bingo-card theme-${this.card.design} font-${
-      this.card.font
-    } size-${this.cardSize} mode-${this.colorMode}" 
+        this.card.font
+      } size-${this.cardSize} mode-${this.colorMode}" 
            id="bingo-card-printable">
         <h2 class="bingo-card-title">${this.card.title}</h2>
         <div class="bingo-grid">
           ${this.card.squares
             .map((square, index) => {
               const resolution = resolutions.find(
-                (r) => r.id === square.resolutionId
+                (r) => r.id === square.resolutionId,
               );
               const text =
                 square.bingoPhrase ||
@@ -144,14 +144,78 @@ export class BingoCardViewPage {
   }
 
   getFreeSquareIcon() {
+    const emojiSize = '1em';
+    const smallSize = '0.8em';
     const icons = {
-      flowers: '🌸 FREE',
-      cute: '⭐ FREE',
-      science: '🔬 FREE',
-      mathy: 'π FREE',
-      animals: '🐾 FREE',
+      // Botanical: Herbs in diamond pattern around FREE
+      botanical: `<div style="position: relative; display: inline-block;">
+        <div style="position: absolute; top: -1.2em; left: 50%; transform: translateX(-50%);">
+          <img src="https://openmoji.org/data/color/svg/1F33F.svg" alt="" style="width: ${emojiSize}; height: ${emojiSize};" />
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5em;">
+          <img src="https://openmoji.org/data/color/svg/1F33F.svg" alt="" style="width: ${emojiSize}; height: ${emojiSize}; transform: scaleX(-1);" />
+          <span style="padding: 0 0.2em;">FREE</span>
+          <img src="https://openmoji.org/data/color/svg/1F33F.svg" alt="" style="width: ${emojiSize}; height: ${emojiSize};" />
+        </div>
+        <div style="position: absolute; bottom: -1.2em; left: 50%; transform: translateX(-50%);">
+          <img src="https://openmoji.org/data/color/svg/1F33F.svg" alt="" style="width: ${emojiSize}; height: ${emojiSize}; transform: rotate(180deg);" />
+        </div>
+      </div>`,
+
+      // Cosmic: Stars and sparkles in corners
+      cosmic: `<div style="position: relative; display: inline-block;">
+        <div style="position: absolute; top: -1em; left: -0.5em;">
+          <img src="https://openmoji.org/data/color/svg/2B50.svg" alt="" style="width: ${smallSize}; height: ${smallSize};" />
+        </div>
+        <div style="position: absolute; top: -1em; right: -0.5em;">
+          <img src="https://openmoji.org/data/color/svg/2728.svg" alt="" style="width: ${smallSize}; height: ${smallSize};" />
+        </div>
+        <span style="padding: 0.5em 1em;">FREE</span>
+        <div style="position: absolute; bottom: -1em; left: -0.5em;">
+          <img src="https://openmoji.org/data/color/svg/2728.svg" alt="" style="width: ${smallSize}; height: ${smallSize}; transform: rotate(180deg);" />
+        </div>
+        <div style="position: absolute; bottom: -1em; right: -0.5em;">
+          <img src="https://openmoji.org/data/color/svg/2B50.svg" alt="" style="width: ${smallSize}; height: ${smallSize}; transform: rotate(180deg);" />
+        </div>
+      </div>`,
+
+      // Ocean: Waves flowing left and right (mirrored)
+      ocean: `<div style="display: flex; align-items: center; gap: 0.4em;">
+        <img src="https://openmoji.org/data/color/svg/1F30A.svg" alt="" style="width: ${emojiSize}; height: ${emojiSize};" />
+        <span>FREE</span>
+        <img src="https://openmoji.org/data/color/svg/1F30A.svg" alt="" style="width: ${emojiSize}; height: ${emojiSize}; transform: scaleX(-1);" />
+      </div>`,
+
+      // Retro: Clean text only
+      retro: 'FREE',
+
+      // Minimal: Clean text only
+      minimal: 'FREE',
+
+      // Doodles: Stars and sparkles scattered playfully
+      doodles: `<div style="position: relative; display: inline-block;">
+        <div style="position: absolute; top: -1em; left: 0;">
+          <img src="https://openmoji.org/data/color/svg/2B50.svg" alt="" style="width: ${smallSize}; height: ${smallSize};" />
+        </div>
+        <div style="position: absolute; top: -0.5em; right: -0.2em;">
+          <img src="https://openmoji.org/data/color/svg/2728.svg" alt="" style="width: ${smallSize}; height: ${smallSize};" />
+        </div>
+        <span style="padding: 0.5em 0.8em;">FREE</span>
+        <div style="position: absolute; bottom: -0.5em; left: -0.2em;">
+          <img src="https://openmoji.org/data/color/svg/2728.svg" alt="" style="width: ${smallSize}; height: ${smallSize};" />
+        </div>
+        <div style="position: absolute; bottom: -1em; right: 0;">
+          <img src="https://openmoji.org/data/color/svg/2B50.svg" alt="" style="width: ${smallSize}; height: ${smallSize};" />
+        </div>
+      </div>`,
+
+      // Zen: Clean text with background yin-yang
+      zen: 'FREE',
+
+      // Bold: Clean text only
+      bold: 'FREE',
     };
-    return icons[this.card.design] || '⭐ FREE';
+    return icons[this.card.design] || 'FREE';
   }
 
   mount() {
@@ -204,7 +268,7 @@ export class BingoCardViewPage {
   async copyCard() {
     const cards = this.state.get('bingoCards') || [];
     const currentProfileCards = cards.filter(
-      (c) => c.profileId === this.state.get('currentProfileId')
+      (c) => c.profileId === this.state.get('currentProfileId'),
     );
 
     if (currentProfileCards.length >= 40) {

@@ -52,8 +52,8 @@ export class BingoCardCreatorPage {
       profileId: this.state.get('currentProfileId'),
       saveName: '',
       title: '2026 Bingo',
-      design: 'flowers',
-      font: 'silly',
+      design: 'botanical',
+      font: 'handwriting',
       squares: Array.from({ length: 25 }, (_, i) => ({
         position: i,
         resolutionId: null,
@@ -134,38 +134,59 @@ export class BingoCardCreatorPage {
               <div class="form-group">
                 <label class="form-label">Design Theme</label>
                 <select class="form-select" id="theme-select">
-                  <option value="flowers" ${
-                    this.cardData.design === 'flowers' ? 'selected' : ''
-                  }>🌸 Flowers</option>
-                  <option value="cute" ${
-                    this.cardData.design === 'cute' ? 'selected' : ''
-                  }>⭐ Cute</option>
-                  <option value="science" ${
-                    this.cardData.design === 'science' ? 'selected' : ''
-                  }>🔬 Science</option>
-                  <option value="mathy" ${
-                    this.cardData.design === 'mathy' ? 'selected' : ''
-                  }>📐 Mathy</option>
-                  <option value="animals" ${
-                    this.cardData.design === 'animals' ? 'selected' : ''
-                  }>🐾 Animals</option>
+                  <option value="botanical" ${
+                    this.cardData.design === 'botanical' ? 'selected' : ''
+                  }>🌿 Botanical Garden</option>
+                  <option value="cosmic" ${
+                    this.cardData.design === 'cosmic' ? 'selected' : ''
+                  }>🌟 Cosmic Explorer</option>
+                  <option value="ocean" ${
+                    this.cardData.design === 'ocean' ? 'selected' : ''
+                  }>🌊 Ocean Waves</option>
+                  <option value="retro" ${
+                    this.cardData.design === 'retro' ? 'selected' : ''
+                  }>⚡ Retro Arcade</option>
+                  <option value="minimal" ${
+                    this.cardData.design === 'minimal' ? 'selected' : ''
+                  }>⬜ Modern Minimal</option>
+                  <option value="doodles" ${
+                    this.cardData.design === 'doodles' ? 'selected' : ''
+                  }>✨ Whimsical Doodles</option>
+                  <option value="zen" ${
+                    this.cardData.design === 'zen' ? 'selected' : ''
+                  }>☯️ Zen Garden</option>
+                  <option value="bold" ${
+                    this.cardData.design === 'bold' ? 'selected' : ''
+                  }>🔥 Bold & Bright</option>
                 </select>
               </div>
               <div class="form-group">
                 <label class="form-label">Font Style</label>
                 <select class="form-select" id="font-select">
-                  <option value="silly" ${
-                    this.cardData.font === 'silly' ? 'selected' : ''
-                  }>Silly</option>
-                  <option value="fancy" ${
-                    this.cardData.font === 'fancy' ? 'selected' : ''
-                  }>Fancy</option>
-                  <option value="writer" ${
-                    this.cardData.font === 'writer' ? 'selected' : ''
-                  }>Writer</option>
+                  <option value="handwriting" ${
+                    this.cardData.font === 'handwriting' ? 'selected' : ''
+                  }>✍️ Cheerful Handwriting</option>
                   <option value="headlines" ${
                     this.cardData.font === 'headlines' ? 'selected' : ''
-                  }>Headlines</option>
+                  }>📰 Bold Headlines</option>
+                  <option value="elegant" ${
+                    this.cardData.font === 'elegant' ? 'selected' : ''
+                  }>💃 Elegant Script</option>
+                  <option value="quirky" ${
+                    this.cardData.font === 'quirky' ? 'selected' : ''
+                  }>🎈 Quirky Fun</option>
+                  <option value="modern" ${
+                    this.cardData.font === 'modern' ? 'selected' : ''
+                  }>🏢 Modern Sans</option>
+                  <option value="typewriter" ${
+                    this.cardData.font === 'typewriter' ? 'selected' : ''
+                  }>⌨️ Vintage Typewriter</option>
+                  <option value="comic" ${
+                    this.cardData.font === 'comic' ? 'selected' : ''
+                  }>😄 Comic Fun</option>
+                  <option value="serif" ${
+                    this.cardData.font === 'serif' ? 'selected' : ''
+                  }>📖 Refined Serif</option>
                 </select>
               </div>
             </div>
@@ -274,14 +295,78 @@ export class BingoCardCreatorPage {
   }
 
   getFreeSquareIcon() {
+    const emojiSize = '1em';
+    const smallSize = '0.8em';
     const icons = {
-      flowers: '🌸 FREE',
-      cute: '⭐ FREE',
-      science: '🔬 FREE',
-      mathy: 'π FREE',
-      animals: '🐾 FREE',
+      // Botanical: Herbs in diamond pattern around FREE
+      botanical: `<div style="position: relative; display: inline-block;">
+        <div style="position: absolute; top: -1.3em; left: 50%; transform: translateX(-50%);">
+          <img src="https://openmoji.org/data/color/svg/1F33F.svg" alt="" style="width: ${emojiSize}; height: ${emojiSize};" />
+        </div>
+        <div style="display: flex; align-items: center; gap: 0em;">
+          <img src="https://openmoji.org/data/color/svg/1F33F.svg" alt="" style="width: ${emojiSize}; height: ${emojiSize}; transform: scaleX(-1);" />
+          <span style="padding: 0 0.2em;">FREE</span>
+          <img src="https://openmoji.org/data/color/svg/1F33F.svg" alt="" style="width: ${emojiSize}; height: ${emojiSize};" />
+        </div>
+        <div style="position: absolute; bottom: -1.5em; left: 50%; transform: translateX(-50%);">
+          <img src="https://openmoji.org/data/color/svg/1F33F.svg" alt="" style="width: ${emojiSize}; height: ${emojiSize}; transform: rotate(180deg);" />
+        </div>
+      </div>`,
+
+      // Cosmic: Stars and sparkles in corners
+      cosmic: `<div style="position: relative; display: inline-block;">
+        <div style="position: absolute; top: -1em; left: 0em;">
+          <img src="https://openmoji.org/data/color/svg/2B50.svg" alt="" style="width: ${smallSize}; height: ${smallSize};" />
+        </div>
+        <div style="position: absolute; top: -1.5em; right: -0em;">
+          <img src="https://openmoji.org/data/color/svg/2728.svg" alt="" style="width: ${smallSize}; height: ${smallSize};" />
+        </div>
+        <span style="padding: 0.5em 1em;">FREE</span>
+        <div style="position: absolute; bottom: -1.5em; left: 0em;">
+          <img src="https://openmoji.org/data/color/svg/2728.svg" alt="" style="width: ${smallSize}; height: ${smallSize}; transform: rotate(180deg);" />
+        </div>
+        <div style="position: absolute; bottom: -1em; right: -0em;">
+          <img src="https://openmoji.org/data/color/svg/2B50.svg" alt="" style="width: ${smallSize}; height: ${smallSize}; transform: rotate(180deg);" />
+        </div>
+      </div>`,
+
+      // Ocean: Waves flowing left and right (mirrored)
+      ocean: `<div style="display: flex; align-items: center; gap: .1em;">
+        <img src="https://openmoji.org/data/color/svg/1F30A.svg" alt="" style="width: ${emojiSize}; height: ${emojiSize}; transform: scaleX(-1)" />
+        <span>FREE</span>
+        <img src="https://openmoji.org/data/color/svg/1F30A.svg" alt="" style="width: ${emojiSize}; height: ${emojiSize};" />
+      </div>`,
+
+      // Retro: Clean text only
+      retro: 'FREE',
+
+      // Minimal: Clean text only
+      minimal: 'FREE',
+
+      // Doodles: Stars and sparkles scattered playfully
+      doodles: `<div style="position: relative; display: inline-block;">
+        <div style="position: absolute; top: -1em; left: 0;">
+          <img src="https://openmoji.org/data/color/svg/2B50.svg" alt="" style="width: ${smallSize}; height: ${smallSize};" />
+        </div>
+        <div style="position: absolute; top: -0.5em; right: -0.2em;">
+          <img src="https://openmoji.org/data/color/svg/2728.svg" alt="" style="width: ${smallSize}; height: ${smallSize};" />
+        </div>
+        <span style="padding: 0.5em 0.8em;">FREE</span>
+        <div style="position: absolute; bottom: -0.5em; left: -0.2em;">
+          <img src="https://openmoji.org/data/color/svg/2728.svg" alt="" style="width: ${smallSize}; height: ${smallSize};" />
+        </div>
+        <div style="position: absolute; bottom: -1em; right: 0;">
+          <img src="https://openmoji.org/data/color/svg/2B50.svg" alt="" style="width: ${smallSize}; height: ${smallSize};" />
+        </div>
+      </div>`,
+
+      // Zen: Clean text with background yin-yang
+      zen: ' ',
+
+      // Bold: Clean text only
+      bold: 'FREE',
     };
-    return icons[this.cardData.design] || '⭐ FREE';
+    return icons[this.cardData.design] || 'FREE';
   }
 
   getCurrentProfileCards() {
