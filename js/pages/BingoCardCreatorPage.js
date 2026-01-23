@@ -10,6 +10,7 @@ import {
   showConfirmDialog,
   showAlertDialog,
 } from '../components/Modal.js';
+import { ResolutionSelectorModal } from '../components/ResolutionSelectorModal.js';
 
 export class BingoCardCreatorPage {
   constructor(state, params) {
@@ -67,9 +68,8 @@ export class BingoCardCreatorPage {
     const container = document.createElement('div');
     container.className = 'page bingo-creator-page';
 
-    const resolutions = this.getFilteredResolutions();
     const selectedCount = this.cardData.squares.filter(
-      (s) => s.resolutionId
+      (s) => s.resolutionId,
     ).length;
     const maxCards = 40;
     const currentCards = this.getCurrentProfileCards().length;
@@ -81,122 +81,127 @@ export class BingoCardCreatorPage {
         <p class="page-description">Design your custom bingo card with up to 25 resolutions</p>
       </div>
 
-      <div class="bingo-creator-layout">
-        <!-- Left Panel: Configuration -->
-        <div class="creator-panel">
-          <div class="creator-section">
+      <div class="bingo-creator-centered">
+        <div class="creator-config-panel">
+          <!-- Card Details -->
+          <div class="config-section">
             <h3 class="section-title">Card Details</h3>
-            <div class="form-group">
-              <label class="form-label">Save Name <span class="text-danger">*</span></label>
-              <input type="text" id="save-name-input" class="form-input" 
-                placeholder="My 2026 Goals" maxlength="30" 
-                value="${this.cardData.saveName}">
-              <span class="char-counter" id="save-name-counter">${
-                this.cardData.saveName.length
-              } / 30</span>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Printed Title <span class="text-danger">*</span></label>
-              <input type="text" id="title-input" class="form-input" 
-                placeholder="2026 Bingo" maxlength="30"
-                value="${this.cardData.title}">
-              <span class="char-counter" id="title-counter">${
-                this.cardData.title.length
-              } / 30</span>
-            </div>
-          </div>
-
-          <div class="creator-section">
-            <h3 class="section-title">Resolution Selection</h3>
-            <div class="selection-count">
-              <strong>${selectedCount} / 25</strong> selected
-              ${
-                selectedCount < 25
-                  ? '<span class="text-muted">(remaining will be Free squares)</span>'
-                  : ''
-              }
-            </div>
-            
-            ${this.renderFilters()}
-            
-            <div class="resolutions-selector" id="resolutions-list">
-              ${this.renderResolutionsList(resolutions)}
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Save Name <span class="text-danger">*</span></label>
+                <input type="text" id="save-name-input" class="form-input" 
+                  placeholder="My 2026 Goals" maxlength="30" 
+                  value="${this.cardData.saveName}">
+                <span class="char-counter" id="save-name-counter">${
+                  this.cardData.saveName.length
+                } / 30</span>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Printed Title <span class="text-danger">*</span></label>
+                <input type="text" id="title-input" class="form-input" 
+                  placeholder="2026 Bingo" maxlength="30"
+                  value="${this.cardData.title}">
+                <span class="char-counter" id="title-counter">${
+                  this.cardData.title.length
+                } / 30</span>
+              </div>
             </div>
           </div>
 
-          <div class="creator-section">
+          <!-- Resolution Selection -->
+          <div class="config-section">
+            <h3 class="section-title">Resolutions</h3>
+            <div class="resolution-selection-summary">
+              <div class="selection-info">
+                <strong>${selectedCount} / 25</strong> resolutions selected
+                ${
+                  selectedCount < 25
+                    ? '<span class="text-muted">(remaining will be Free squares)</span>'
+                    : ''
+                }
+              </div>
+              <button class="btn btn-primary" id="select-resolutions-btn">
+                ${getOpenMojiHTML('1F4CB', 'clipboard')} Select Resolutions
+              </button>
+            </div>
+            ${selectedCount > 0 ? this.renderSelectedResolutionsSummary() : ''}
+          </div>
+
+          <!-- Visual Style -->
+          <div class="config-section">
             <h3 class="section-title">Visual Style</h3>
-            <div class="form-group">
-              <label class="form-label">Design Theme</label>
-              <select class="form-select" id="theme-select">
-                <option value="flowers" ${
-                  this.cardData.design === 'flowers' ? 'selected' : ''
-                }>Flowers</option>
-                <option value="cute" ${
-                  this.cardData.design === 'cute' ? 'selected' : ''
-                }>Cute</option>
-                <option value="science" ${
-                  this.cardData.design === 'science' ? 'selected' : ''
-                }>Science</option>
-                <option value="mathy" ${
-                  this.cardData.design === 'mathy' ? 'selected' : ''
-                }>Mathy</option>
-                <option value="animals" ${
-                  this.cardData.design === 'animals' ? 'selected' : ''
-                }>Animals</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Font Style</label>
-              <select class="form-select" id="font-select">
-                <option value="silly" ${
-                  this.cardData.font === 'silly' ? 'selected' : ''
-                }>Silly</option>
-                <option value="fancy" ${
-                  this.cardData.font === 'fancy' ? 'selected' : ''
-                }>Fancy</option>
-                <option value="writer" ${
-                  this.cardData.font === 'writer' ? 'selected' : ''
-                }>Writer</option>
-                <option value="headlines" ${
-                  this.cardData.font === 'headlines' ? 'selected' : ''
-                }>Headlines</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="creator-section">
-            <h3 class="section-title">Actions</h3>
-            <div class="flex flex-col gap-md">
-              <button class="btn btn-secondary" id="shuffle-btn">
-                ${getOpenMojiHTML('1F500', 'shuffle')} Shuffle Squares
-              </button>
-              <button class="btn btn-primary" id="save-btn" ${
-                !canSave ? 'disabled' : ''
-              }>
-                ${getOpenMojiHTML('1F4BE', 'floppy disk')} ${
-      this.isEditMode ? 'Update' : 'Save'
-    } Card
-              </button>
-              ${
-                !canSave
-                  ? `<p class="text-danger text-sm">You've reached the maximum of ${maxCards} cards</p>`
-                  : ''
-              }
-              <a href="#/bingo-cards" class="btn btn-outline">Cancel</a>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Design Theme</label>
+                <select class="form-select" id="theme-select">
+                  <option value="flowers" ${
+                    this.cardData.design === 'flowers' ? 'selected' : ''
+                  }>🌸 Flowers</option>
+                  <option value="cute" ${
+                    this.cardData.design === 'cute' ? 'selected' : ''
+                  }>⭐ Cute</option>
+                  <option value="science" ${
+                    this.cardData.design === 'science' ? 'selected' : ''
+                  }>🔬 Science</option>
+                  <option value="mathy" ${
+                    this.cardData.design === 'mathy' ? 'selected' : ''
+                  }>📐 Mathy</option>
+                  <option value="animals" ${
+                    this.cardData.design === 'animals' ? 'selected' : ''
+                  }>🐾 Animals</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Font Style</label>
+                <select class="form-select" id="font-select">
+                  <option value="silly" ${
+                    this.cardData.font === 'silly' ? 'selected' : ''
+                  }>Silly</option>
+                  <option value="fancy" ${
+                    this.cardData.font === 'fancy' ? 'selected' : ''
+                  }>Fancy</option>
+                  <option value="writer" ${
+                    this.cardData.font === 'writer' ? 'selected' : ''
+                  }>Writer</option>
+                  <option value="headlines" ${
+                    this.cardData.font === 'headlines' ? 'selected' : ''
+                  }>Headlines</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Right Panel: Live Preview -->
-        <div class="preview-panel">
-          <div class="card">
-            <h3 class="text-center mb-md">Live Preview</h3>
-            <p class="text-muted text-center text-sm mb-md">Click any square to edit</p>
-            <div class="bingo-preview-container" id="bingo-preview">
-              ${this.renderBingoPreview()}
-            </div>
+        <!-- Live Preview -->
+        <div class="creator-preview-panel">
+          <div class="preview-header">
+            <h3>Live Preview</h3>
+            <p class="text-muted text-sm">Click any square to edit or drag to reorder</p>
           </div>
+          <div class="bingo-preview-container" id="bingo-preview">
+            ${this.renderBingoPreview()}
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="creator-actions">
+          <button class="btn btn-secondary" id="shuffle-btn">
+            ${getOpenMojiHTML('1F500', 'shuffle')} Shuffle Squares
+          </button>
+          <div class="flex-spacer"></div>
+          <a href="#/bingo-cards" class="btn btn-outline">Cancel</a>
+          <button class="btn btn-primary btn-lg" id="save-btn" ${
+            !canSave ? 'disabled' : ''
+          }>
+            ${getOpenMojiHTML('1F4BE', 'floppy disk')} ${
+              this.isEditMode ? 'Update' : 'Save'
+            } Card
+          </button>
+          ${
+            !canSave
+              ? `<p class="text-danger text-sm">You've reached the maximum of ${maxCards} cards</p>`
+              : ''
+          }
         </div>
       </div>
     `;
@@ -204,114 +209,32 @@ export class BingoCardCreatorPage {
     return container;
   }
 
-  renderFilters() {
-    const categories = this.getCurrentProfileCategories();
+  renderSelectedResolutionsSummary() {
+    const selectedResolutions = this.cardData.squares
+      .filter((s) => s.resolutionId)
+      .map((s) => {
+        const res = (this.state.get('resolutions') || []).find(
+          (r) => r.id === s.resolutionId,
+        );
+        return res;
+      })
+      .filter((r) => r); // Remove null entries
 
-    return `
-      <div class="filters-section">
-        <details class="filter-group">
-          <summary class="filter-summary">Filter Resolutions</summary>
-          <div class="filter-content">
-            <div class="filter-category">
-              <strong class="filter-label">Frequency:</strong>
-              <label class="checkbox-label">
-                <input type="checkbox" value="single" class="filter-frequency"> Single Occurrence
-              </label>
-              <label class="checkbox-label">
-                <input type="checkbox" value="count" class="filter-frequency"> Number of Times
-              </label>
-              <label class="checkbox-label">
-                <input type="checkbox" value="rate" class="filter-frequency"> Per Duration
-              </label>
-            </div>
-            
-            <div class="filter-category">
-              <strong class="filter-label">Excitement:</strong>
-              ${[1, 2, 3, 4, 5]
-                .map(
-                  (level) => `
-                <label class="checkbox-label">
-                  <input type="checkbox" value="${level}" class="filter-excitement"> 
-                  ${this.getExcitementLabel(level)}
-                </label>
-              `
-                )
-                .join('')}
-            </div>
-            
-            ${
-              categories.length > 0
-                ? `
-              <div class="filter-category">
-                <strong class="filter-label">Categories:</strong>
-                ${categories
-                  .map(
-                    (cat) => `
-                  <label class="checkbox-label">
-                    <input type="checkbox" value="${cat.id}" class="filter-category"> 
-                    <span class="category-badge" style="background-color: ${cat.color}"></span>
-                    ${cat.name}
-                  </label>
-                `
-                  )
-                  .join('')}
-              </div>
-            `
-                : ''
-            }
-            
-            <button class="btn btn-sm btn-outline" id="clear-filters-btn">Clear Filters</button>
-          </div>
-        </details>
-      </div>
-    `;
-  }
-
-  renderResolutionsList(resolutions) {
-    if (resolutions.length === 0) {
-      return `
-        <div class="empty-state-sm">
-          <p class="text-muted">No resolutions match your filters.</p>
-          <a href="#/resolutions" class="btn btn-sm btn-primary">Add Resolutions</a>
-        </div>
-      `;
+    if (selectedResolutions.length === 0) {
+      return '';
     }
 
     return `
-      <div class="resolutions-list-scroll">
-        ${resolutions
-          .map((res) => {
-            const isSelected = this.cardData.squares.some(
-              (s) => s.resolutionId === res.id
-            );
-            const category = this.getCategoryById(res.lifeCategoryId);
-
-            return `
-            <div class="resolution-item ${
-              isSelected ? 'selected' : ''
-            }" data-resolution-id="${res.id}">
-              <div class="resolution-content">
-                <div class="resolution-text">${truncateText(res.text, 80)}</div>
-                <div class="resolution-meta">
-                  ${
-                    category
-                      ? `<span class="badge" style="background-color: ${category.color}">${category.name}</span>`
-                      : ''
-                  }
-                  <span class="badge-neutral">${this.getFrequencyText(
-                    res.frequency
-                  )}</span>
-                </div>
-              </div>
-              <button class="btn btn-sm ${
-                isSelected ? 'btn-danger' : 'btn-primary'
-              }" 
-                      data-action="${isSelected ? 'remove' : 'add'}">
-                ${isSelected ? 'Remove' : 'Add'}
-              </button>
-            </div>
-          `;
-          })
+      <div class="selected-resolutions-tags">
+        ${selectedResolutions
+          .map(
+            (res) => `
+          <span class="resolution-tag">
+            ${truncateText(res.text, 40)}
+            <button class="tag-remove" data-resolution-id="${res.id}" title="Remove">×</button>
+          </span>
+        `,
+          )
           .join('')}
       </div>
     `;
@@ -322,14 +245,14 @@ export class BingoCardCreatorPage {
 
     return `
       <div class="bingo-card theme-${this.cardData.design} font-${
-      this.cardData.font
-    }" id="bingo-card">
+        this.cardData.font
+      }" id="bingo-card">
         <h2 class="bingo-card-title">${this.cardData.title || '2026 Bingo'}</h2>
         <div class="bingo-grid" id="bingo-grid">
           ${this.cardData.squares
             .map((square, index) => {
               const resolution = resolutions.find(
-                (r) => r.id === square.resolutionId
+                (r) => r.id === square.resolutionId,
               );
               const text =
                 square.bingoPhrase ||
@@ -361,39 +284,18 @@ export class BingoCardCreatorPage {
     return icons[this.cardData.design] || '⭐ FREE';
   }
 
-  getFilteredResolutions() {
-    const currentProfileId = this.state.get('currentProfileId');
-    let resolutions = (this.state.get('resolutions') || [])
-      .filter((r) => r.profileId === currentProfileId)
-      .sort((a, b) => a.order - b.order);
-
-    // Apply filters
-    if (this.filters.frequency.length > 0) {
-      resolutions = resolutions.filter((r) =>
-        this.filters.frequency.includes(r.frequency.type)
-      );
-    }
-
-    if (this.filters.excitement.length > 0) {
-      resolutions = resolutions.filter((r) =>
-        this.filters.excitement.includes(r.excitementLevel)
-      );
-    }
-
-    if (this.filters.categories.length > 0) {
-      resolutions = resolutions.filter((r) =>
-        this.filters.categories.includes(r.lifeCategoryId)
-      );
-    }
-
-    return resolutions;
-  }
-
   getCurrentProfileCards() {
     const currentProfileId = this.state.get('currentProfileId');
     return (this.state.get('bingoCards') || []).filter(
-      (c) => c.profileId === currentProfileId
+      (c) => c.profileId === currentProfileId,
     );
+  }
+
+  getAllProfileResolutions() {
+    const currentProfileId = this.state.get('currentProfileId');
+    return (this.state.get('resolutions') || [])
+      .filter((r) => r.profileId === currentProfileId)
+      .sort((a, b) => a.order - b.order);
   }
 
   getCurrentProfileCategories() {
@@ -430,6 +332,7 @@ export class BingoCardCreatorPage {
   mount() {
     this.setupEventListeners();
     this.setupDragAndDrop();
+    this.setupSquareClickHandler();
   }
 
   setupEventListeners() {
@@ -478,46 +381,21 @@ export class BingoCardCreatorPage {
       this.updatePreview();
     });
 
-    // Filter checkboxes
-    document.querySelectorAll('.filter-frequency').forEach((checkbox) => {
-      checkbox.addEventListener('change', () => {
-        this.updateFilters();
-      });
-    });
-
-    document.querySelectorAll('.filter-excitement').forEach((checkbox) => {
-      checkbox.addEventListener('change', () => {
-        this.updateFilters();
-      });
-    });
-
-    document.querySelectorAll('.filter-category').forEach((checkbox) => {
-      checkbox.addEventListener('change', () => {
-        this.updateFilters();
-      });
-    });
-
+    // Select Resolutions button
     document
-      .getElementById('clear-filters-btn')
+      .getElementById('select-resolutions-btn')
       ?.addEventListener('click', () => {
-        this.clearFilters();
+        this.openResolutionSelector();
       });
 
-    // Resolution add/remove buttons
+    // Remove resolution tags
     document
-      .getElementById('resolutions-list')
+      .querySelector('.selected-resolutions-tags')
       ?.addEventListener('click', (e) => {
-        const button = e.target.closest('button[data-action]');
-        if (button) {
-          const resolutionId =
-            button.closest('.resolution-item').dataset.resolutionId;
-          const action = button.dataset.action;
-
-          if (action === 'add') {
-            this.addResolutionToCard(resolutionId);
-          } else if (action === 'remove') {
-            this.removeResolutionFromCard(resolutionId);
-          }
+        const removeBtn = e.target.closest('.tag-remove');
+        if (removeBtn) {
+          const resolutionId = removeBtn.dataset.resolutionId;
+          this.removeResolutionFromCard(resolutionId);
         }
       });
 
@@ -530,9 +408,16 @@ export class BingoCardCreatorPage {
     document.getElementById('save-btn')?.addEventListener('click', () => {
       this.saveCard();
     });
+  }
 
+  setupSquareClickHandler() {
     // Click on squares to edit
     document.getElementById('bingo-grid')?.addEventListener('click', (e) => {
+      // Don't handle click if we just finished dragging
+      if (this.isDragging && this.isDragging()) {
+        return;
+      }
+
       const square = e.target.closest('.bingo-square');
       if (square && !square.classList.contains('free-square')) {
         const position = parseInt(square.dataset.position);
@@ -541,17 +426,110 @@ export class BingoCardCreatorPage {
     });
   }
 
+  openResolutionSelector() {
+    const selectedResolutionIds = this.cardData.squares
+      .filter((s) => s.resolutionId)
+      .map((s) => s.resolutionId);
+
+    const modal = new ResolutionSelectorModal({
+      state: this.state,
+      selectedResolutions: selectedResolutionIds,
+      onSelectionChange: (newSelection) => {
+        this.updateResolutionSelection(newSelection);
+      },
+    });
+
+    modal.open();
+  }
+
+  updateResolutionSelection(selectedResolutionIds) {
+    // Clear all current selections
+    this.cardData.squares.forEach((square) => {
+      square.resolutionId = null;
+      square.bingoPhrase = null;
+    });
+
+    // Add new selections
+    selectedResolutionIds.forEach((resId, index) => {
+      if (index < 25) {
+        this.cardData.squares[index].resolutionId = resId;
+        this.cardData.squares[index].bingoPhrase = null;
+      }
+    });
+
+    this.updatePreview();
+    this.refreshPage();
+  }
+
+  refreshPage() {
+    // Re-render the resolution summary section
+    const summaryContainer = document.querySelector(
+      '.resolution-selection-summary',
+    );
+    if (summaryContainer) {
+      const selectedCount = this.cardData.squares.filter(
+        (s) => s.resolutionId,
+      ).length;
+      summaryContainer.innerHTML = `
+        <div class="selection-info">
+          <strong>${selectedCount} / 25</strong> resolutions selected
+          ${selectedCount < 25 ? '<span class="text-muted">(remaining will be Free squares)</span>' : ''}
+        </div>
+        <button class="btn btn-primary" id="select-resolutions-btn">
+          ${getOpenMojiHTML('1F4CB', 'clipboard')} Select Resolutions
+        </button>
+      `;
+
+      // Re-attach event listener
+      document
+        .getElementById('select-resolutions-btn')
+        ?.addEventListener('click', () => {
+          this.openResolutionSelector();
+        });
+    }
+
+    // Update or add the selected resolutions tags
+    const configSection = summaryContainer?.closest('.config-section');
+    if (configSection) {
+      let tagsContainer = configSection.querySelector(
+        '.selected-resolutions-tags',
+      );
+      const newTagsHTML = this.renderSelectedResolutionsSummary();
+
+      if (tagsContainer) {
+        if (newTagsHTML) {
+          tagsContainer.outerHTML = newTagsHTML;
+        } else {
+          tagsContainer.remove();
+        }
+      } else if (newTagsHTML) {
+        configSection.insertAdjacentHTML('beforeend', newTagsHTML);
+      }
+
+      // Re-attach remove tag listeners
+      configSection
+        .querySelector('.selected-resolutions-tags')
+        ?.addEventListener('click', (e) => {
+          const removeBtn = e.target.closest('.tag-remove');
+          if (removeBtn) {
+            const resolutionId = removeBtn.dataset.resolutionId;
+            this.removeResolutionFromCard(resolutionId);
+          }
+        });
+    }
+  }
+
   updateFilters() {
     this.filters.frequency = Array.from(
-      document.querySelectorAll('.filter-frequency:checked')
+      document.querySelectorAll('.filter-frequency:checked'),
     ).map((cb) => cb.value);
 
     this.filters.excitement = Array.from(
-      document.querySelectorAll('.filter-excitement:checked')
+      document.querySelectorAll('.filter-excitement:checked'),
     ).map((cb) => parseInt(cb.value));
 
     this.filters.categories = Array.from(
-      document.querySelectorAll('.filter-category:checked')
+      document.querySelectorAll('.filter-category:checked'),
     ).map((cb) => cb.value);
 
     this.refreshResolutionsList();
@@ -560,7 +538,7 @@ export class BingoCardCreatorPage {
   clearFilters() {
     document
       .querySelectorAll(
-        '.filter-frequency, .filter-excitement, .filter-category'
+        '.filter-frequency, .filter-excitement, .filter-category',
       )
       .forEach((cb) => (cb.checked = false));
     this.filters = { frequency: [], excitement: [], categories: [] };
@@ -582,7 +560,7 @@ export class BingoCardCreatorPage {
       emptySquare.resolutionId = resolutionId;
       emptySquare.bingoPhrase = null; // Will use resolution text by default
       this.updatePreview();
-      this.refreshResolutionsList();
+      this.refreshPage();
     } else {
       showAlertDialog({
         title: 'Card Full',
@@ -593,13 +571,13 @@ export class BingoCardCreatorPage {
 
   removeResolutionFromCard(resolutionId) {
     const square = this.cardData.squares.find(
-      (s) => s.resolutionId === resolutionId
+      (s) => s.resolutionId === resolutionId,
     );
     if (square) {
       square.resolutionId = null;
       square.bingoPhrase = null;
       this.updatePreview();
-      this.refreshResolutionsList();
+      this.refreshPage();
     }
   }
 
@@ -612,7 +590,10 @@ export class BingoCardCreatorPage {
         bingoPhrase: s.bingoPhrase,
       }));
 
-    // Shuffle array
+    const resolutionCount = filledSquares.length;
+    const centerPosition = 12; // Center of 5x5 grid (0-indexed)
+
+    // Shuffle the resolutions
     for (let i = filledSquares.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [filledSquares[i], filledSquares[j]] = [
@@ -621,18 +602,58 @@ export class BingoCardCreatorPage {
       ];
     }
 
-    // Reassign to squares
-    let filledIndex = 0;
-    this.cardData.squares.forEach((square) => {
-      if (filledIndex < filledSquares.length) {
-        square.resolutionId = filledSquares[filledIndex].resolutionId;
-        square.bingoPhrase = filledSquares[filledIndex].bingoPhrase;
-        filledIndex++;
-      } else {
+    if (resolutionCount === 25) {
+      // Case 1: All squares are resolutions, just shuffle them
+      this.cardData.squares.forEach((square, index) => {
+        square.resolutionId = filledSquares[index].resolutionId;
+        square.bingoPhrase = filledSquares[index].bingoPhrase;
+      });
+    } else if (resolutionCount === 24) {
+      // Case 2: 24 resolutions, put free square at center
+      let resIndex = 0;
+      this.cardData.squares.forEach((square, index) => {
+        if (index === centerPosition) {
+          // Center is free
+          square.resolutionId = null;
+          square.bingoPhrase = null;
+        } else {
+          // Fill with shuffled resolution
+          square.resolutionId = filledSquares[resIndex].resolutionId;
+          square.bingoPhrase = filledSquares[resIndex].bingoPhrase;
+          resIndex++;
+        }
+      });
+    } else {
+      // Case 3: < 24 resolutions, put one free at center, shuffle the rest
+      // Create array of all positions except center
+      const availablePositions = Array.from({ length: 25 }, (_, i) => i).filter(
+        (i) => i !== centerPosition,
+      );
+
+      // Shuffle available positions
+      for (let i = availablePositions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [availablePositions[i], availablePositions[j]] = [
+          availablePositions[j],
+          availablePositions[i],
+        ];
+      }
+
+      // Clear all squares first
+      this.cardData.squares.forEach((square) => {
         square.resolutionId = null;
         square.bingoPhrase = null;
-      }
-    });
+      });
+
+      // Put resolutions in shuffled positions (first N positions of shuffled array)
+      filledSquares.forEach((res, index) => {
+        const position = availablePositions[index];
+        this.cardData.squares[position].resolutionId = res.resolutionId;
+        this.cardData.squares[position].bingoPhrase = res.bingoPhrase;
+      });
+
+      // Center and remaining positions are already free (null)
+    }
 
     this.updatePreview();
   }
@@ -640,6 +661,7 @@ export class BingoCardCreatorPage {
   setupDragAndDrop() {
     let draggedElement = null;
     let draggedPosition = null;
+    let isDragging = false;
 
     const grid = document.getElementById('bingo-grid');
     if (!grid) return;
@@ -649,6 +671,7 @@ export class BingoCardCreatorPage {
       if (square && !square.classList.contains('free-square')) {
         draggedElement = square;
         draggedPosition = parseInt(square.dataset.position);
+        isDragging = true;
         square.classList.add('dragging');
       }
     });
@@ -658,6 +681,10 @@ export class BingoCardCreatorPage {
       if (square) {
         square.classList.remove('dragging');
       }
+      // Small delay to allow drop event to complete before resetting
+      setTimeout(() => {
+        isDragging = false;
+      }, 50);
     });
 
     grid.addEventListener('dragover', (e) => {
@@ -690,6 +717,9 @@ export class BingoCardCreatorPage {
       draggedElement = null;
       draggedPosition = null;
     });
+
+    // Store isDragging reference for click handler
+    this.isDragging = () => isDragging;
   }
 
   editSquare(position) {
@@ -697,7 +727,7 @@ export class BingoCardCreatorPage {
     if (!square.resolutionId) return;
 
     const resolution = (this.state.get('resolutions') || []).find(
-      (r) => r.id === square.resolutionId
+      (r) => r.id === square.resolutionId,
     );
 
     if (!resolution) return;
@@ -722,13 +752,13 @@ export class BingoCardCreatorPage {
         <label class="form-label">Change Resolution</label>
         <select class="form-select" id="resolution-select">
           <option value="">-- Select Different Resolution --</option>
-          ${this.getFilteredResolutions()
+          ${this.getAllProfileResolutions()
             .map(
               (r) => `
             <option value="${r.id}" ${r.id === resolution.id ? 'selected' : ''}>
               ${truncateText(r.text, 60)}
             </option>
-          `
+          `,
             )
             .join('')}
         </select>
@@ -790,6 +820,7 @@ export class BingoCardCreatorPage {
     if (previewContainer) {
       previewContainer.innerHTML = this.renderBingoPreview();
       this.setupDragAndDrop();
+      this.setupSquareClickHandler();
     }
   }
 

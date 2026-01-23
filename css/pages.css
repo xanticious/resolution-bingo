@@ -163,27 +163,27 @@
    Bingo Card Creator Page
    =================================== */
 
-.bingo-creator-layout {
-  display: grid;
-  grid-template-columns: 40% 60%;
+/* New centered layout */
+.bingo-creator-centered {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
   gap: var(--spacing-xl);
-  min-height: 600px;
 }
 
-.creator-panel {
+.creator-config-panel {
   background: var(--white);
   border-radius: var(--radius-lg);
-  padding: var(--spacing-lg);
+  padding: var(--spacing-xl);
   box-shadow: var(--shadow-sm);
-  overflow-y: auto;
-  max-height: calc(100vh - 200px);
 }
 
-.creator-section {
+.config-section {
   margin-bottom: var(--spacing-xl);
 }
 
-.creator-section:last-child {
+.config-section:last-child {
   margin-bottom: 0;
 }
 
@@ -195,140 +195,93 @@
   border-bottom: 2px solid var(--border-gray);
 }
 
-/* Selection Count */
-.selection-count {
-  background: var(--light-gray);
-  padding: var(--spacing-md);
-  border-radius: var(--radius-md);
-  margin-bottom: var(--spacing-md);
-  text-align: center;
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
 }
 
-/* Filters */
-.filters-section {
-  margin-bottom: var(--spacing-md);
-}
-
-.filter-group {
-  border: 1px solid var(--border-gray);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-}
-
-.filter-summary {
-  background: var(--light-gray);
-  padding: var(--spacing-md);
-  cursor: pointer;
-  font-weight: 600;
-  user-select: none;
-}
-
-.filter-summary:hover {
-  background: var(--border-gray);
-}
-
-.filter-content {
-  padding: var(--spacing-md);
-  border-top: 1px solid var(--border-gray);
-}
-
-.filter-category {
-  margin-bottom: var(--spacing-md);
-}
-
-.filter-category:last-child {
-  margin-bottom: 0;
-}
-
-.filter-label {
-  display: block;
-  margin-bottom: var(--spacing-xs);
-  color: var(--dark-gray);
-}
-
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  padding: var(--spacing-xs) 0;
-  cursor: pointer;
-}
-
-.checkbox-label input[type='checkbox'] {
-  margin-right: var(--spacing-sm);
-}
-
-.category-badge {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  margin-right: var(--spacing-xs);
-  border: 1px solid var(--border-gray);
-}
-
-/* Resolutions Selector */
-.resolutions-selector {
-  max-height: 400px;
-  overflow-y: auto;
-  border: 1px solid var(--border-gray);
-  border-radius: var(--radius-md);
-}
-
-.resolutions-list-scroll {
-  display: flex;
-  flex-direction: column;
-}
-
-.resolution-item {
+/* Resolution Selection Summary */
+.resolution-selection-summary {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--spacing-md);
-  border-bottom: 1px solid var(--border-gray);
   gap: var(--spacing-md);
-  transition: background-color var(--transition-fast);
-}
-
-.resolution-item:last-child {
-  border-bottom: none;
-}
-
-.resolution-item:hover {
+  padding: var(--spacing-md);
   background: var(--light-gray);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-md);
 }
 
-.resolution-item.selected {
-  background: rgba(124, 58, 237, 0.1);
-  border-left: 3px solid var(--primary-purple);
-}
-
-.resolution-content {
+.selection-info {
   flex: 1;
-  min-width: 0;
 }
 
-.resolution-text {
-  font-size: 0.95rem;
-  color: var(--dark-gray);
-  margin-bottom: var(--spacing-xs);
-}
-
-.resolution-meta {
+.selected-resolutions-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
 }
 
-.empty-state-sm {
+.resolution-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  background: rgba(124, 58, 237, 0.1);
+  color: var(--primary-purple);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  border: 1px solid rgba(124, 58, 237, 0.2);
+}
+
+.tag-remove {
+  background: none;
+  border: none;
+  color: var(--danger);
+  font-size: 1.5rem;
+  line-height: 1;
+  padding: 0;
+  cursor: pointer;
+  margin-left: var(--spacing-xs);
+  transition: transform var(--transition-fast);
+}
+
+.tag-remove:hover {
+  transform: scale(1.2);
+}
+
+/* Creator Actions */
+.creator-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
   padding: var(--spacing-lg);
-  text-align: center;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.flex-spacer {
+  flex: 1;
 }
 
 /* Preview Panel */
-.preview-panel {
-  position: sticky;
-  top: calc(var(--spacing-xl) + 80px);
-  height: fit-content;
+.creator-preview-panel {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.preview-header {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.preview-header h3 {
+  margin-bottom: var(--spacing-xs);
 }
 
 .bingo-preview-container {
